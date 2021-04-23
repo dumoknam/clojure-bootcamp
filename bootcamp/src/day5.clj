@@ -57,6 +57,48 @@
   (->seat-id "FBFBBFFRRR")
   (->seat-id "FBFBBFFRLR"))
 
+;; ---------- ---------- ---------- ---------- ---------- ----------
+;; part 1. refactoring
+;; {:row :column} 을 컬렉션 대신 하나의 데이터로 취급하도록 변경
+(defn seat-map [seat-str]
+  {:row    (subs seat-str 0 7)
+   :column (subs seat-str 7 10)})
+
+(defn binary-match [seat-ch]
+  (case seat-ch
+    \F 0
+    \L 0
+    \B 1
+    \R 1
+    0))
+
+(defn parse-int [binary-list]
+  (-> binary-list
+      (clojure.string/join)
+      (Integer/parseInt 2)))
+
+(defn seat-to-integer-map [seat-map]
+  (into {} (for [[k v] seat-map]
+             [k (->> v
+                     (map binary-match)
+                     (parse-int))])))
+
+(defn calculate-id [{row :row column :column}]
+  (+ (* row 8) column))
+
+(defn ->seat-id [seat]
+  (->> seat
+       (seat-map)
+       (seat-to-integer-map)
+       (calculate-id)))
+
+; part 1 solution.
+(apply max (map ->seat-id input))
+
+(comment
+  (calculate-id (seat-to-integer (seat-map "FBFBBFFRLL"))))
+
+;; ---------- ---------- ---------- ---------- ---------- ----------
 ;; part 2.
 (def seat-ids (map ->seat-id input))
 (def max-id (apply max seat-ids))
@@ -65,5 +107,5 @@
 (defn sum-to [value]
   (apply + (range (+ 1 value))))
 
-; 1부터 high 까지 합 - 1부터 (low-1) 까지 합 - 있는것들 = 없는 값
+; 1부터 high 까지 합 - 1부터 (low-1) 까지 합 - 있는 id들 = 없는 id값 (answer)
 (apply - (sum-to max-id) (sum-to (- min-id 1)) seat-ids)
