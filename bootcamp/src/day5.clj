@@ -104,8 +104,10 @@
 (def max-id (apply max seat-ids))
 (def min-id (apply min seat-ids))
 
-(defn sum-to [value]
-  (apply + (range (+ 1 value))))
+; min 부터 high 까지의 합 - 있는 id들의 합 = 없는 id값 (answer)
+(-
+  (apply + (range min-id (+ 1 max-id)))
+  (apply + seat-ids))
 
-; 1부터 high 까지 합 - 1부터 (low-1) 까지 합 - 있는 id들 = 없는 id값 (answer)
-(apply - (sum-to max-id) (sum-to (- min-id 1)) seat-ids)
+(comment
+  (prn max-id min-id))
