@@ -17,7 +17,7 @@
 
 (def line-regex #"(\d+)-(\d+) (\w{1}): (\w+)")
 
-(defn input-map [line]
+(defn input->map [line]
   (let [[_ i j ch password] (re-find line-regex line)]
     {:i        (Integer/parseInt i)
      :j        (Integer/parseInt j)
@@ -26,7 +26,7 @@
 
 ; part 1 answer
 (->> input
-     (map input-map)
+     (map input->map)
      (filter valid-password?)
      (count))
 
@@ -40,7 +40,7 @@
 
 ; part 2 answer
 (->> input
-     (map input-map)
+     (map input->map)
      (filter valid-password2?)
      (count))
 
@@ -50,11 +50,10 @@
   (pr input)
   (frequencies "xpxc")
   (frequency \x "xpxc")
-  (valid-password? {:i "3" :j "5" :ch "v" :password "qvjvjdhvl"})
-  (parse-input "1-2 x: xpxc")
-  (input-map ["1-2 x: xpxc"])
+  (valid-password? {:i 3 :j 5 :ch \v :password "qvjvjdhvl"})
+  (input->map "1-2 x: xpxc")
   (first "x")
   (re-find (re-matcher line-regex "1-2 x: xpxc"))
   (->> ["1-2 x: xpxc" "1-12 x: xpxc"]
        (map input-map)
-       (map valid-password?)))
+       (filter valid-password?)))
