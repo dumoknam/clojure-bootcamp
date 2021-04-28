@@ -15,10 +15,13 @@
       (conj result element)
       (if (= "" (first lines))
         (recur (conj result element) "" (rest lines))
-        (recur result (c-str/join " " (remove c-str/blank? [element (first lines)])) (rest lines))))))
+        (recur result (if (empty? element)
+                        (first lines)
+                        (str element " " (first lines)))
+               (rest lines))))))
 
-(defn split-by-colon [[lines]]
-  (c-str/split lines #":"))
+(defn split-by-colon [[words]]
+  (c-str/split words #":"))
 
 (defn to-kv [kv]
   {(keyword (first kv)) (second kv)})
