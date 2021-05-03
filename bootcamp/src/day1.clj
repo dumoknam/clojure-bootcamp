@@ -1,12 +1,8 @@
 (ns day1)
-(def input (util/file->lines "day1.txt"))
-
-(defn str->int [s]
-  (Integer/parseInt s))
+(def input (util/file->int-lines "day1.txt"))
 
 (def input-set
   (->> input
-       (map str->int)
        (apply sorted-set)))
 
 (defn sum=value? [n]
@@ -39,3 +35,18 @@
      (flatten)
      (apply sorted-set)
      (reduce *))
+
+
+;; refactoring 1. for - list comprehension
+;=> part 1.
+(apply * (first (for [x input-set
+                      y input-set
+                      :when (= 2020 (+ x y))]
+                  [x y])))
+;=> part 2.
+(apply * (first (for [x input-set
+                      y input-set
+                      z input-set
+                      :when (= 2020 (+ x y z))]
+                  [x y z])))
+
